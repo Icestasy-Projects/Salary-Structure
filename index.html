@@ -157,35 +157,41 @@ button:hover{
 }
 
 .pdf-mode{
-    padding:10px !important;
+    padding:5px 10px !important;
     box-shadow:none !important;
 }
 
-.pdf-mode .section{
-    margin-top:6px !important;
-}
-
-.pdf-mode .section h2{
-    padding:4px 8px !important;
-    font-size:14px !important;
-}
-
-.pdf-mode td{
-    padding:3px 8px !important;
-    font-size:13px !important;
-}
-
 .pdf-mode .header{
-    margin-bottom:6px !important;
+    margin-bottom:2px !important;
 }
 
 .pdf-mode h1{
-    font-size:18px !important;
+    font-size:16px !important;
 }
 
 .pdf-mode .logo{
-    width:40px !important;
-    height:40px !important;
+    width:35px !important;
+    height:35px !important;
+}
+
+.pdf-mode .section{
+    margin-top:2px !important;
+}
+
+.pdf-mode .section h2{
+    padding:3px 8px !important;
+    font-size:12px !important;
+    border-radius:4px !important;
+}
+
+.pdf-mode td{
+    padding:2px 8px !important;
+    font-size:11px !important;
+}
+
+.pdf-mode .net td{
+    font-size:13px !important;
+    padding:4px 8px !important;
 }
 
 @media(max-width:700px){
@@ -457,7 +463,7 @@ function downloadPDF(){
     element.classList.add("pdf-mode");
 
     var opt={
-        margin:       [0.3, 0.4, 0.3, 0.4],
+        margin:       [0.2, 0.3, 0.2, 0.3],
         filename:     'Salary_Structure.pdf',
         image:        {type:'jpeg',quality:0.98},
         html2canvas:  {scale:2,useCORS:true},
