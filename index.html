@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salary Structure Calculator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+    padding:30px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    border-radius:10px;
+    padding:30px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.logo{
+    width:80px;
+    height:80px;
+    margin:0 auto 10px;
+    display:block;
+}
+
+h1{
+    text-align:center;
+    color:#0b5ed7;
+    margin-bottom:0;
+}
+
+.inputBox{
+    margin-bottom:25px;
+}
+
+label{
+    font-weight:600;
+    display:block;
+    margin-bottom:8px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    font-size:18px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+.section{
+    margin-top:25px;
+}
+
+.section h2{
+    background:#0b5ed7;
+    color:white;
+    padding:10px;
+    border-radius:6px;
+    font-size:18px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+td{
+    padding:10px;
+    border-bottom:1px solid #eee;
+}
+
+td:first-child{
+    font-weight:600;
+}
+
+td:last-child{
+    text-align:right;
+}
+
+.total{
+    background:#eef5ff;
+    font-weight:bold;
+}
+
+.net{
+    background:#198754;
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.footer{
+    margin-top:20px;
+    text-align:center;
+    display:flex;
+    justify-content:center;
+    gap:12px;
+}
+
+button{
+    background:#0b5ed7;
+    color:white;
+    border:none;
+    padding:12px 22px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#084298;
+}
+
+.btn-pdf{
+    background:#198754;
+}
+
+.btn-pdf:hover{
+    background:#146c43;
+}
+
+@media print{
+    body{
+        background:white;
+        padding:0;
+    }
+    .container{
+        box-shadow:none;
+    }
+    .footer{
+        display:none;
+    }
+    .inputBox{
+        display:none;
+    }
+}
+
+@media(max-width:700px){
+    td{
+        font-size:14px;
+    }
+}
+</style>
+
+</head>
+<body>
+
+<div class="container" id="salary-slip">
+
+<div class="header">
+<svg class="logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="100" cy="90" r="80" fill="#1a5fb4" stroke="#1a5fb4" stroke-width="2"/>
+  <circle cx="70" cy="55" r="22" fill="white"/>
+  <circle cx="100" cy="45" r="25" fill="white"/>
+  <circle cx="130" cy="55" r="22" fill="white"/>
+  <circle cx="60" cy="75" r="18" fill="white"/>
+  <circle cx="140" cy="75" r="18" fill="white"/>
+  <circle cx="80" cy="80" r="15" fill="white"/>
+  <circle cx="120" cy="80" r="15" fill="white"/>
+  <circle cx="100" cy="70" r="20" fill="white"/>
+  <ellipse cx="100" cy="95" rx="45" ry="10" fill="white"/>
+  <circle cx="100" cy="105" r="18" fill="white"/>
+  <ellipse cx="85" cy="108" rx="12" ry="10" fill="white"/>
+  <ellipse cx="115" cy="108" rx="12" ry="10" fill="white"/>
+  <text x="100" y="185" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="42" font-weight="900" fill="#1a5fb4" letter-spacing="4">TPPL</text>
+</svg>
+<h1>Employee Salary Structure Calculator</h1>
+</div>
+
+<div class="inputBox">
+<label>Annual CTC (&#8377;)</label>
+<input type="number" id="annualCTC" placeholder="Enter Annual CTC">
+</div>
+
+<div class="section">
+<h2>Monthly CTC</h2>
+
+<table>
+
+<tr>
+<td>Monthly CTC</td>
+<td id="monthlyCTC">&#8377;0</td>
+</tr>
+
+<tr>
+<td>Variable Pay (25%)</td>
+<td id="variablePay">&#8377;0</td>
+</tr>
+
+<tr class="total">
+<td>Fixed Pay (75%)</td>
+<td id="fixedPay">&#8377;0</td>
+</tr>
+
+</table>
+</div>
+
+<div class="section">
+
+<h2>Employer Contributions</h2>
+
+<table>
+
+<tr>
+<td>Employer ESIC</td>
+<td id="empESIC">&#8377;0</td>
+</tr>
+
+<tr>
+<td>Employer LWF</td>
+<td id="empLWF">&#8377;0</td>
+</tr>
+
+<tr>
+<td>Employer PF</td>
+<td id="empPF">&#8377;0</td>
+</tr>
+
+<tr>
+<td>Admin Charges</td>
+<td id="admin">&#8377;0</td>
+</tr>
+
+<tr>
+<td>EDLI</td>
+<td id="edli">&#8377;0</td>
+</tr>
+
+<tr class="total">
+<td>Total Employer Contribution</td>
+<td id="totalEmployer">&#8377;0</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h2>Salary Components</h2>
+
+<table>
+
+<tr>
+<td>Monthly Gross</td>
+<td id="gross">&#8377;0</td>
+</tr>
+
+<tr>
+<td>Basic</td>
+<td id="basic">&#8377;0</td>
+</tr>
+
+<tr>
+<td>HRA</td>
+<td id="hra">&#8377;0</td>
+</tr>
+
+<tr>
+<td>LTA</td>
+<td id="lta">&#8377;0</td>
+</tr>
+
+<tr class="total">
+<td>Variable Allowance</td>
+<td id="allowance">&#8377;0</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h2>Employee Deductions</h2>
+
+<table>
+
+<tr>
+<td>Employee PF</td>
+<td id="pfDed">&#8377;0</td>
+</tr>
+
+<tr>
+<td>Employee ESIC</td>
+<td id="esicDed">&#8377;0</td>
+</tr>
+
+<tr>
+<td>Employee LWF</td>
+<td id="lwfDed">&#8377;0</td>
+</tr>
+
+<tr>
+<td>Professional Tax</td>
+<td id="ptDed">&#8377;0</td>
+</tr>
+
+<tr class="total">
+<td>Total Employee Deductions</td>
+<td id="totalDeduction">&#8377;0</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h2>Net Salary</h2>
+
+<table>
+
+<tr class="net">
+<td>Net Monthly Salary</td>
+<td id="netSalary">&#8377;0</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="footer">
+<button onclick="window.print()">Print</button>
+<button class="btn-pdf" onclick="downloadPDF()">Download PDF</button>
+</div>
+
+</div>
+
+<script>
+
+function money(v){
+    return "₹"+v.toLocaleString('en-IN',{
+        minimumFractionDigits:0,
+        maximumFractionDigits:0
+    });
+}
+
+document.getElementById("annualCTC").addEventListener("input",calculate);
+
+function calculate(){
+
+    let annual=Number(document.getElementById("annualCTC").value)||0;
+
+    let monthly=annual/12;
+
+    let variable=monthly*0.25;
+
+    let fixed=monthly-variable;
+
+    let basic=fixed*0.50;
+
+    let hra=basic*0.50;
+
+    let lta=basic*0.10;
+
+    let employerESIC=Math.round(basic<21001 ? basic*0.0325 : 0);
+
+    let employerLWF=12;
+
+    let employerPF=Math.round(basic>15000 ? 1800 : basic*0.12);
+
+    let admin=Math.round(basic>15000 ? 75 : basic*0.005);
+
+    let edli=75;
+
+    let employerTotal=employerESIC+employerLWF+employerPF+admin+edli;
+
+    let gross=monthly-variable-employerTotal;
+
+    let allowance=fixed-employerTotal-basic-hra-lta;
+
+    let employeePF=Math.round(basic>15000 ? 1800 : basic*0.12);
+
+    let employeeESIC=Math.round(basic<21001 ? basic*0.0075 : 0);
+
+    let employeeLWF=0;
+
+    let pt=200;
+
+    let employeeTotal=employeePF+employeeESIC+employeeLWF+pt;
+
+    let net=gross-employeeTotal;
+
+    document.getElementById("monthlyCTC").innerHTML=money(Math.round(monthly));
+    document.getElementById("variablePay").innerHTML=money(Math.round(variable));
+    document.getElementById("fixedPay").innerHTML=money(Math.round(fixed));
+
+    document.getElementById("empESIC").innerHTML=money(employerESIC);
+    document.getElementById("empLWF").innerHTML=money(employerLWF);
+    document.getElementById("empPF").innerHTML=money(employerPF);
+    document.getElementById("admin").innerHTML=money(admin);
+    document.getElementById("edli").innerHTML=money(edli);
+    document.getElementById("totalEmployer").innerHTML=money(employerTotal);
+
+    document.getElementById("gross").innerHTML=money(Math.round(gross));
+    document.getElementById("basic").innerHTML=money(Math.round(basic));
+    document.getElementById("hra").innerHTML=money(Math.round(hra));
+    document.getElementById("lta").innerHTML=money(Math.round(lta));
+    document.getElementById("allowance").innerHTML=money(Math.round(allowance));
+
+    document.getElementById("pfDed").innerHTML=money(employeePF);
+    document.getElementById("esicDed").innerHTML=money(employeeESIC);
+    document.getElementById("lwfDed").innerHTML=money(employeeLWF);
+    document.getElementById("ptDed").innerHTML=money(pt);
+    document.getElementById("totalDeduction").innerHTML=money(employeeTotal);
+
+    document.getElementById("netSalary").innerHTML=money(Math.round(net));
+
+}
+
+function downloadPDF(){
+    var element=document.getElementById("salary-slip");
+    var inputBox=element.querySelector(".inputBox");
+    var footer=element.querySelector(".footer");
+
+    inputBox.style.display="none";
+    footer.style.display="none";
+
+    var opt={
+        margin:       0.5,
+        filename:     'Salary_Structure.pdf',
+        image:        {type:'jpeg',quality:0.98},
+        html2canvas:  {scale:2,useCORS:true},
+        jsPDF:        {unit:'in',format:'a4',orientation:'portrait'}
+    };
+
+    html2pdf().set(opt).from(element).save().then(function(){
+        inputBox.style.display="";
+        footer.style.display="";
+    });
+}
+
+</script>
+
+</body>
+</html>
