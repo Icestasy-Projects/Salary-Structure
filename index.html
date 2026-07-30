@@ -24,30 +24,33 @@ body{
     margin:auto;
     background:white;
     border-radius:10px;
-    padding:30px;
+    padding:20px 30px;
     box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
 
 .header{
     text-align:center;
-    margin-bottom:25px;
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
 }
 
 .logo{
-    width:80px;
-    height:80px;
-    margin:0 auto 10px;
-    display:block;
+    width:50px;
+    height:50px;
+    flex-shrink:0;
 }
 
 h1{
-    text-align:center;
     color:#0b5ed7;
     margin-bottom:0;
+    font-size:22px;
 }
 
 .inputBox{
-    margin-bottom:25px;
+    margin-bottom:15px;
 }
 
 label{
@@ -65,15 +68,15 @@ input{
 }
 
 .section{
-    margin-top:25px;
+    margin-top:10px;
 }
 
 .section h2{
     background:#0b5ed7;
     color:white;
-    padding:10px;
+    padding:6px 10px;
     border-radius:6px;
-    font-size:18px;
+    font-size:16px;
 }
 
 table{
@@ -82,8 +85,9 @@ table{
 }
 
 td{
-    padding:10px;
+    padding:5px 10px;
     border-bottom:1px solid #eee;
+    font-size:14px;
 }
 
 td:first-child{
@@ -102,7 +106,7 @@ td:last-child{
 .net{
     background:#198754;
     color:white;
-    font-size:20px;
+    font-size:16px;
     font-weight:bold;
 }
 
@@ -152,6 +156,38 @@ button:hover{
     }
 }
 
+.pdf-mode{
+    padding:10px !important;
+    box-shadow:none !important;
+}
+
+.pdf-mode .section{
+    margin-top:6px !important;
+}
+
+.pdf-mode .section h2{
+    padding:4px 8px !important;
+    font-size:14px !important;
+}
+
+.pdf-mode td{
+    padding:3px 8px !important;
+    font-size:13px !important;
+}
+
+.pdf-mode .header{
+    margin-bottom:6px !important;
+}
+
+.pdf-mode h1{
+    font-size:18px !important;
+}
+
+.pdf-mode .logo{
+    width:40px !important;
+    height:40px !important;
+}
+
 @media(max-width:700px){
     td{
         font-size:14px;
@@ -165,22 +201,7 @@ button:hover{
 <div class="container" id="salary-slip">
 
 <div class="header">
-<svg class="logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="100" cy="90" r="80" fill="#1a5fb4" stroke="#1a5fb4" stroke-width="2"/>
-  <circle cx="70" cy="55" r="22" fill="white"/>
-  <circle cx="100" cy="45" r="25" fill="white"/>
-  <circle cx="130" cy="55" r="22" fill="white"/>
-  <circle cx="60" cy="75" r="18" fill="white"/>
-  <circle cx="140" cy="75" r="18" fill="white"/>
-  <circle cx="80" cy="80" r="15" fill="white"/>
-  <circle cx="120" cy="80" r="15" fill="white"/>
-  <circle cx="100" cy="70" r="20" fill="white"/>
-  <ellipse cx="100" cy="95" rx="45" ry="10" fill="white"/>
-  <circle cx="100" cy="105" r="18" fill="white"/>
-  <ellipse cx="85" cy="108" rx="12" ry="10" fill="white"/>
-  <ellipse cx="115" cy="108" rx="12" ry="10" fill="white"/>
-  <text x="100" y="185" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="42" font-weight="900" fill="#1a5fb4" letter-spacing="4">TPPL</text>
-</svg>
+<img class="logo" src="logo.png" alt="TPPL Logo">
 <h1>Employee Salary Structure Calculator</h1>
 </div>
 
@@ -433,18 +454,21 @@ function downloadPDF(){
 
     inputBox.style.display="none";
     footer.style.display="none";
+    element.classList.add("pdf-mode");
 
     var opt={
-        margin:       0.5,
+        margin:       [0.3, 0.4, 0.3, 0.4],
         filename:     'Salary_Structure.pdf',
         image:        {type:'jpeg',quality:0.98},
         html2canvas:  {scale:2,useCORS:true},
-        jsPDF:        {unit:'in',format:'a4',orientation:'portrait'}
+        jsPDF:        {unit:'in',format:'a4',orientation:'portrait'},
+        pagebreak:    {mode:['avoid-all']}
     };
 
     html2pdf().set(opt).from(element).save().then(function(){
         inputBox.style.display="";
         footer.style.display="";
+        element.classList.remove("pdf-mode");
     });
 }
 
