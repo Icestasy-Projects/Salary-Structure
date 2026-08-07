@@ -18,9 +18,9 @@ PAGE_W, PAGE_H = A4
 
 TREVOR_CHARTS = [
     {"pattern": "Double Top",            "stock": "Apollo Hospitals Enterprise Ltd. (NSE)", "timeframe": "30 min", "source": "apurva/img-000.png"},
-    {"pattern": "Double Bottom",         "stock": "HDFC Bank Ltd. (NSE)",                  "timeframe": "Daily",  "source": "vidhi/img-002.png"},
+    {"pattern": "Double Bottom",         "stock": "Tata Motors Ltd. (NSE)",                 "timeframe": "Daily",  "source": "shivanjali/img-000.png"},
     {"pattern": "Triple Top",            "stock": "Bajaj Holdings & Investment Ltd. (NSE)", "timeframe": "Daily",  "source": "shivanjali/img-002.png"},
-    {"pattern": "Triple Bottom",         "stock": "Larsen & Toubro Ltd. (NSE)",             "timeframe": "Daily",  "source": "vidhi/img-004.png"},
+    {"pattern": "Triple Bottom",         "stock": "Wipro Ltd. (NSE)",                       "timeframe": "Daily",  "source": "shivanjali/img-001.png"},
     {"pattern": "Rectangle (Box)",       "stock": "Jio Financial Services Ltd. (NSE)",      "timeframe": "Daily",  "source": "apurva/img-004.png"},
     {"pattern": "Descending Triangle",   "stock": "Hindustan Unilever Ltd. (NSE)",          "timeframe": "Daily",  "source": "shivanjali/img-004.png"},
     {"pattern": "Ascending Triangle",    "stock": "Nestle India Ltd. (NSE)",                "timeframe": "Daily",  "source": "vidhi/img-007.png"},
@@ -30,9 +30,9 @@ TREVOR_CHARTS = [
 ]
 
 SHARVARI_CHARTS = [
-    {"pattern": "Double Top",            "stock": "DCB Bank Ltd. (NSE)",                    "timeframe": "Daily",  "source": "vidhi/img-001.png"},
+    {"pattern": "Double Top",            "stock": "Apollo Hospitals Enterprise Ltd. (NSE)", "timeframe": "30 min", "source": "apurva/img-000.png"},
     {"pattern": "Double Bottom",         "stock": "Tata Motors Ltd. (NSE)",                 "timeframe": "Daily",  "source": "shivanjali/img-000.png"},
-    {"pattern": "Triple Top",            "stock": "Hindustan Zinc Ltd. (NSE)",              "timeframe": "Daily",  "source": "apurva/img-002.png"},
+    {"pattern": "Triple Top",            "stock": "Bajaj Holdings & Investment Ltd. (NSE)", "timeframe": "Daily",  "source": "shivanjali/img-002.png"},
     {"pattern": "Triple Bottom",         "stock": "Wipro Ltd. (NSE)",                       "timeframe": "Daily",  "source": "shivanjali/img-001.png"},
     {"pattern": "Rectangle (Box)",       "stock": "Kalyan Jewellers India Ltd. (NSE)",      "timeframe": "Daily",  "source": "vidhi/img-005.png"},
     {"pattern": "Descending Triangle",   "stock": "Hindalco Industries Ltd. (NSE)",         "timeframe": "Daily",  "source": "apurva/img-005.png"},
