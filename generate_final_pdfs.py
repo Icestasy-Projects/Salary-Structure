@@ -30,16 +30,29 @@ TREVOR_CHARTS = [
 ]
 
 SHARVARI_CHARTS = [
-    {"pattern": "Double Top",            "stock": "DCB Bank Ltd. (NSE)",                    "timeframe": "Daily",  "source": "vidhi/img-001.png"},
+    {"pattern": "Double Top",            "stock": "DCB Bank Ltd. (NSE)",                    "timeframe": "Daily",  "source": "vidhi/img-001-annotated.png"},
     {"pattern": "Double Bottom",         "stock": "Tata Motors Ltd. (NSE)",                 "timeframe": "Daily",  "source": "shivanjali/img-000.png"},
-    {"pattern": "Triple Top",            "stock": "Hindustan Zinc Ltd. (NSE)",              "timeframe": "Daily",  "source": "apurva/img-002.png"},
-    {"pattern": "Triple Bottom",         "stock": "Mahindra Logistics Ltd. (NSE)",          "timeframe": "30 min", "source": "apurva/img-003.png"},
+    {"pattern": "Triple Top",            "stock": "Hindustan Zinc Ltd. (NSE)",              "timeframe": "Daily",  "source": "apurva/img-002-annotated.png"},
+    {"pattern": "Triple Bottom",         "stock": "Mahindra Logistics Ltd. (NSE)",          "timeframe": "30 min", "source": "apurva/img-003-annotated.png"},
     {"pattern": "Rectangle (Box)",       "stock": "Kalyan Jewellers India Ltd. (NSE)",      "timeframe": "Daily",  "source": "vidhi/img-005.png"},
     {"pattern": "Descending Triangle",   "stock": "Hindalco Industries Ltd. (NSE)",         "timeframe": "Daily",  "source": "apurva/img-005.png"},
     {"pattern": "Ascending Triangle",    "stock": "Reliance Industries Ltd. (NSE)",         "timeframe": "Daily",  "source": "shivanjali/img-005.png"},
     {"pattern": "Symmetrical Triangle",  "stock": "State Bank of India (NSE)",              "timeframe": "Daily",  "source": "shivanjali/img-006.png"},
     {"pattern": "Diamond Top",           "stock": "Dr. Lal PathLabs Ltd. (NSE)",            "timeframe": "4 Hour", "source": "apurva/img-008.png"},
     {"pattern": "Wedge",                 "stock": "Titan Company Ltd. (NSE)",               "timeframe": "Daily",  "source": "shivanjali/img-008.png"},
+]
+
+FARHAAN_CHARTS = [
+    {"pattern": "Double Top",            "stock": "Apollo Hospitals Enterprise Ltd. (NSE)", "timeframe": "30 min", "source": "apurva/img-000.png"},
+    {"pattern": "Double Bottom",         "stock": "HDFC Bank Ltd. (NSE)",                  "timeframe": "Daily",  "source": "vidhi/img-002.png"},
+    {"pattern": "Triple Top",            "stock": "InterGlobe Aviation Ltd. (NSE)",        "timeframe": "Daily",  "source": "vidhi/img-003.png"},
+    {"pattern": "Triple Bottom",         "stock": "Larsen & Toubro Ltd. (NSE)",            "timeframe": "Daily",  "source": "vidhi/img-004.png"},
+    {"pattern": "Rectangle (Box)",       "stock": "Tata Motors Ltd. (NSE)",                "timeframe": "Daily",  "source": "shivanjali/img-003.png"},
+    {"pattern": "Descending Triangle",   "stock": "Patanjali Foods Ltd. (NSE)",            "timeframe": "Daily",  "source": "vidhi/img-006.png"},
+    {"pattern": "Ascending Triangle",    "stock": "Apollo Hospitals Enterprise Ltd. (NSE)", "timeframe": "Weekly", "source": "apurva/img-006.png"},
+    {"pattern": "Symmetrical Triangle",  "stock": "ITC Ltd. (NSE)",                        "timeframe": "Daily",  "source": "vidhi/img-008.png"},
+    {"pattern": "Diamond Top",           "stock": "Indian Bank (NSE)",                     "timeframe": "Daily",  "source": "vidhi/img-009.png"},
+    {"pattern": "Wedge",                 "stock": "Anant Raj Ltd. (NSE)",                  "timeframe": "Daily",  "source": "vidhi/img-010.png"},
 ]
 
 BLACK = HexColor("#000000")
@@ -129,7 +142,7 @@ def generate_pdf(filename, name, roll_no, charts):
 
 
 def main():
-    for img_info in TREVOR_CHARTS + SHARVARI_CHARTS:
+    for img_info in TREVOR_CHARTS + SHARVARI_CHARTS + FARHAAN_CHARTS:
         full_path = os.path.join(IMG_DIR, img_info["source"])
         if not os.path.exists(full_path):
             print(f"WARNING: Missing image: {full_path}")
@@ -139,6 +152,9 @@ def main():
 
     print("Generating Sharvari Itagi MSF14 PDF...")
     generate_pdf("Sharvari_Itagi_MSF14.pdf", "Sharvari Itagi", "MSF14", SHARVARI_CHARTS)
+
+    print("Generating Farhaan Khanche MSF15 PDF...")
+    generate_pdf("Farhaan_Khanche_MSF15.pdf", "Farhaan Khanche", "MSF15", FARHAAN_CHARTS)
 
     print("\nDone!")
 
