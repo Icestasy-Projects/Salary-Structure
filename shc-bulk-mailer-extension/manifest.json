@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "SHC Bulk Mailer",
+  "version": "2.0",
+  "description": "Send personalized bulk outreach emails via Zoho Mail — for investment outreach and client engagement.",
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "https://mail.zoho.in/*",
+    "https://mail.zoho.com/*",
+    "https://mail.zoho.eu/*",
+    "https://mail.zoho.com.au/*"
+  ]
+}

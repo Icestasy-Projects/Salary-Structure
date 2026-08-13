@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SHC Bulk Mailer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    width: 500px;
+    min-height: 500px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0d0d0d;
+    color: #e8e4dc;
+    font-size: 13px;
+  }
+
+  .header {
+    background: #111;
+    border-bottom: 1px solid #222;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-dot {
+    width: 28px; height: 28px;
+    background: #c8a96e;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 11px;
+    color: #0d0d0d;
+    letter-spacing: 0.5px;
+  }
+
+  .header h1 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e8e4dc;
+    letter-spacing: 0.3px;
+  }
+
+  .header span {
+    font-size: 11px;
+    color: #666;
+    margin-left: auto;
+  }
+
+  .tabs {
+    display: flex;
+    background: #111;
+    border-bottom: 1px solid #1e1e1e;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+    color: #555;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    letter-spacing: 0.4px;
+    transition: color 0.15s;
+  }
+
+  .tab.active {
+    color: #c8a96e;
+    border-bottom: 2px solid #c8a96e;
+  }
+
+  .tab:hover:not(.active) { color: #999; }
+
+  .panel { display: none; padding: 16px 20px; }
+  .panel.active { display: block; }
+
+  label {
+    display: block;
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 5px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  input, textarea, select {
+    width: 100%;
+    background: #161616;
+    border: 1px solid #252525;
+    border-radius: 6px;
+    color: #e8e4dc;
+    font-size: 13px;
+    padding: 9px 11px;
+    margin-bottom: 12px;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.15s;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: #c8a96e;
+  }
+
+  textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+  .row { display: flex; gap: 10px; }
+  .row > * { flex: 1; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    transition: opacity 0.15s, transform 0.1s;
+    letter-spacing: 0.3px;
+  }
+
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-primary {
+    background: #c8a96e;
+    color: #0d0d0d;
+    width: 100%;
+  }
+
+  .btn-primary:hover:not(:disabled) { opacity: 0.9; }
+
+  .btn-secondary {
+    background: #1e1e1e;
+    color: #ccc;
+    border: 1px solid #2a2a2a;
+  }
+
+  .btn-secondary:hover { background: #252525; }
+
+  .btn-danger {
+    background: #3a1a1a;
+    color: #e07070;
+    border: 1px solid #4a2020;
+  }
+
+  .btn-stop {
+    background: #4a2020;
+    color: #fff;
+    border: 1px solid #6a3030;
+    width: 100%;
+  }
+
+  .recipients-toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .recipients-toolbar span {
+    margin-left: auto;
+    font-size: 11px;
+    color: #555;
+  }
+
+  .recipient-list {
+    background: #161616;
+    border: 1px solid #252525;
+    border-radius: 6px;
+    max-height: 180px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+  }
+
+  .recipient-list:empty::after {
+    content: 'No recipients yet — add manually or paste CSV below';
+    display: block;
+    padding: 20px;
+    text-align: center;
+    color: #444;
+    font-size: 12px;
+  }
+
+  .recipient-row {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid #1e1e1e;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .recipient-row:last-child { border-bottom: none; }
+
+  .recipient-row .name { color: #e8e4dc; font-weight: 500; flex: 1; }
+  .recipient-row .email { color: #666; flex: 2; }
+  .recipient-row .company { color: #555; flex: 1.5; }
+
+  .r-del {
+    background: none;
+    border: none;
+    color: #444;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .r-del:hover { color: #e07070; background: #2a1a1a; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .tag-gold { background: #2a2010; color: #c8a96e; border: 1px solid #3a3015; }
+
+  .progress-section { display: none; padding: 16px 20px; }
+
+  .progress-bar-wrap {
+    background: #1e1e1e;
+    border-radius: 6px;
+    height: 6px;
+    overflow: hidden;
+    margin: 12px 0;
+  }
+
+  .progress-bar-fill {
+    background: #c8a96e;
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.3s;
+    width: 0%;
+  }
+
+  .progress-status {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 8px;
+  }
+
+  .log-area {
+    background: #111;
+    border: 1px solid #1e1e1e;
+    border-radius: 6px;
+    padding: 10px 12px;
+    height: 160px;
+    overflow-y: auto;
+    font-size: 11px;
+    font-family: 'Consolas', monospace;
+    line-height: 1.7;
+    color: #666;
+  }
+
+  .log-area .log-ok { color: #5cb85c; }
+  .log-area .log-err { color: #e07070; }
+  .log-area .log-info { color: #c8a96e; }
+
+  .stats {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .stat-box {
+    flex: 1;
+    background: #161616;
+    border: 1px solid #222;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .stat-box .val {
+    font-size: 22px;
+    font-weight: 600;
+    display: block;
+  }
+
+  .stat-box .lbl {
+    font-size: 10px;
+    color: #555;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .gold { color: #c8a96e; }
+  .green { color: #5cb85c; }
+  .red { color: #e07070; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #1e1e1e;
+    margin: 14px 0;
+  }
+
+  .note {
+    background: #15120a;
+    border: 1px solid #2a2010;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 11px;
+    color: #8a7a55;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .inline-add {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .inline-add input {
+    margin-bottom: 0;
+    flex: 1;
+  }
+
+  .inline-add input:nth-child(2) { flex: 1.5; }
+  .inline-add input:nth-child(3) { flex: 2; }
+
+  .add-btn {
+    padding: 9px 14px;
+    background: #1e1e1e;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    color: #c8a96e;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .add-btn:hover { background: #252525; }
+
+  .settings-section { margin-bottom: 16px; }
+
+  .help-text {
+    font-size: 11px;
+    color: #444;
+    line-height: 1.8;
+  }
+
+  .help-text a { color: #c8a96e; }
+  .help-text strong { color: #666; }
+  .help-text code {
+    background: #1a1a1a;
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #aaa;
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-dot">SHC</div>
+  <h1>Bulk Mailer</h1>
+  <span id="savedBadge" style="display:none;" class="tag tag-gold">Settings saved</span>
+</div>
+
+<div class="tabs">
+  <button class="tab active" id="tabBtn-compose" data-tab="compose">Compose</button>
+  <button class="tab" id="tabBtn-recipients" data-tab="recipients">Recipients</button>
+  <button class="tab" id="tabBtn-settings" data-tab="settings">Settings</button>
+</div>
+
+<!-- COMPOSE TAB -->
+<div id="tab-compose" class="panel active">
+  <label>Subject <span style="color:#555; text-transform:none; font-size:10px; font-weight:400;">(supports {{name}} and {{company}})</span></label>
+  <input type="text" id="subject" placeholder="Email subject line...">
+
+  <label>Email Body <span style="color:#555; text-transform:none; font-size:10px; font-weight:400;">(use {{name}} and {{company}} for personalization)</span></label>
+  <textarea id="body" style="min-height:180px;" placeholder="Write your email here...">Dear {{name}},
+
+Greetings from SHC Growth Partners!
+
+We are currently advising Triverra, a DeepTech Robotics Venture Studio, on its Series A3 round ($2M raise at $25M valuation).
+
+[Add the rest of your email body here]
+
+Warm regards,
+Trevor Dcosta | SHC Growth Partners</textarea>
+
+  <hr class="divider">
+
+  <div class="row">
+    <div>
+      <label>Delay Between Emails</label>
+      <select id="delay">
+        <option value="3">3 seconds</option>
+        <option value="5" selected>5 seconds</option>
+        <option value="10">10 seconds</option>
+        <option value="15">15 seconds</option>
+        <option value="30">30 seconds</option>
+        <option value="60">60 seconds</option>
+      </select>
+    </div>
+    <div>
+      <label>Recipients Loaded</label>
+      <input type="text" id="recipientCount" value="0 recipients" readonly style="color:#c8a96e; cursor:default;">
+    </div>
+  </div>
+
+  <button class="btn btn-primary" id="sendBtn">
+    Send Campaign
+  </button>
+</div>
+
+<!-- RECIPIENTS TAB -->
+<div id="tab-recipients" class="panel">
+
+  <div class="note">
+    Add recipients manually below, or import/paste CSV data. Columns: <strong>Name, Email, Company</strong>. Duplicates are automatically skipped.
+  </div>
+
+  <div class="inline-add">
+    <input type="text" id="addName" placeholder="Name" style="flex:1">
+    <input type="text" id="addEmail" placeholder="Email" style="flex:1.5">
+    <input type="text" id="addCompany" placeholder="Company (optional)" style="flex:2">
+    <button class="add-btn" id="addRecipientBtn" title="Add recipient">+</button>
+  </div>
+
+  <div class="recipients-toolbar">
+    <button class="btn btn-secondary" id="importBtn" style="font-size:12px; padding:7px 12px;">
+      Import CSV
+    </button>
+    <input type="file" id="csvFile" accept=".csv" style="display:none">
+    <button class="btn btn-secondary" id="pasteCSVBtn" style="font-size:12px; padding:7px 12px;">
+      Paste CSV
+    </button>
+    <button class="btn btn-danger" id="clearAllBtn" style="font-size:12px; padding:7px 12px;">
+      Clear All
+    </button>
+    <span id="countBadge">0 added</span>
+  </div>
+
+  <div class="recipient-list" id="recipientList"></div>
+
+  <hr class="divider">
+  <label>Or Paste CSV (Name, Email, Company — one per line)</label>
+  <textarea id="csvInput" placeholder="John Smith, john@acme.com, Acme Capital&#10;Jane Doe, jane@xyz.com, XYZ Family Office" style="min-height:70px;"></textarea>
+  <button class="btn btn-secondary" id="parseCSVBtn" style="width:100%; margin-top:-4px;">Parse CSV Text</button>
+</div>
+
+<!-- SETTINGS TAB -->
+<div id="tab-settings" class="panel">
+  <div class="note">
+    These settings are saved securely in your browser. You only need to set this up once per token.
+  </div>
+
+  <div class="settings-section">
+    <label>Zoho Region</label>
+    <select id="sZohoDomain">
+      <option value="zoho.in">India (zoho.in)</option>
+      <option value="zoho.com">US / Global (zoho.com)</option>
+      <option value="zoho.eu">Europe (zoho.eu)</option>
+      <option value="zoho.com.au">Australia (zoho.com.au)</option>
+    </select>
+
+    <label>Your Zoho Email</label>
+    <input type="email" id="sEmail" placeholder="you@yourdomain.com">
+
+    <label>Zoho OAuth Access Token <span style="color:#555; text-transform:none; font-size:10px;">(from Zoho API Console)</span></label>
+    <input type="password" id="sToken" placeholder="Paste your access token here...">
+
+    <label>Zoho Account ID <span style="color:#555; text-transform:none; font-size:10px;">(numeric ID from Zoho Mail API)</span></label>
+    <input type="text" id="sAccountId" placeholder="e.g., 1234567890">
+
+    <label>BCC Addresses <span style="color:#555; text-transform:none; font-size:10px;">(comma separated, optional)</span></label>
+    <input type="text" id="sBcc" placeholder="manager@company.com, tracker@company.com">
+  </div>
+
+  <button class="btn btn-primary" id="saveSettingsBtn">Save Settings</button>
+
+  <hr class="divider">
+
+  <div class="help-text">
+    <strong>How to get your Zoho credentials:</strong><br><br>
+    <strong>Step 1:</strong> Go to <a href="https://api-console.zoho.in" target="_blank">api-console.zoho.in</a> (or .com for US)<br>
+    <strong>Step 2:</strong> Create a <strong>"Self Client"</strong> application<br>
+    <strong>Step 3:</strong> Go to "Generate Code" tab<br>
+    <strong>Step 4:</strong> Enter scope: <code>ZohoMail.messages.CREATE</code><br>
+    <strong>Step 5:</strong> Generate the code, then exchange it for an Access Token<br><br>
+    <strong>Get your Account ID:</strong><br>
+    Open <a href="https://mail.zoho.in/api/accounts" target="_blank">mail.zoho.in/api/accounts</a> while logged into Zoho Mail and copy the <code>accountId</code> from the response.<br><br>
+    <strong>Note:</strong> Access tokens expire (typically 1 hour). When emails fail with "token expired", generate a new token and update it here. For long-term use, set up a refresh token flow.
+  </div>
+</div>
+
+<!-- PROGRESS SECTION -->
+<div class="progress-section" id="progressSection">
+  <div class="progress-status" id="progressStatus">Starting campaign...</div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressFill"></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-box">
+      <span class="val gold" id="statTotal">0</span>
+      <span class="lbl">Total</span>
+    </div>
+    <div class="stat-box">
+      <span class="val green" id="statSent">0</span>
+      <span class="lbl">Sent</span>
+    </div>
+    <div class="stat-box">
+      <span class="val red" id="statFailed">0</span>
+      <span class="lbl">Failed</span>
+    </div>
+  </div>
+
+  <div class="log-area" id="logArea" style="margin-top:12px;"></div>
+
+  <div style="display:flex; gap:8px; margin-top:12px;">
+    <button class="btn btn-stop" id="stopBtn">Stop Campaign</button>
+    <button class="btn btn-secondary" id="resetBtn" style="width:100%; display:none;">Back to Compose</button>
+  </div>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>
